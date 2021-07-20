@@ -1101,6 +1101,8 @@ func (h *handler) handleReadingListStream(w http.ResponseWriter, r *http.Request
 		}
 	}
 	builder.WithLimit(rm.Count)
+	builder.WithOrder(model.DefaultSortingOrder)
+	builder.WithDirection(rm.SortDirection)
 	rawEntryIDs, err := builder.GetEntryIDs()
 	if err != nil {
 		json.ServerError(w, r, err)
@@ -1119,6 +1121,8 @@ func (h *handler) handleStarredStream(w http.ResponseWriter, r *http.Request, rm
 	builder := h.store.NewEntryQueryBuilder(userID)
 	builder.WithStarred()
 	builder.WithLimit(rm.Count)
+	builder.WithOrder(model.DefaultSortingOrder)
+	builder.WithDirection(rm.SortDirection)
 	rawEntryIDs, err := builder.GetEntryIDs()
 	if err != nil {
 		json.ServerError(w, r, err)
@@ -1136,6 +1140,8 @@ func (h *handler) handleReadStream(w http.ResponseWriter, r *http.Request, rm Re
 	userID := request.UserID(r)
 	builder := h.store.NewEntryQueryBuilder(userID)
 	builder.WithStatus(model.EntryStatusRead)
+	builder.WithOrder(model.DefaultSortingOrder)
+	builder.WithDirection(rm.SortDirection)
 	if rm.StartTime > 0 {
 		builder.AfterDate(time.Unix(rm.StartTime, 0))
 	}
